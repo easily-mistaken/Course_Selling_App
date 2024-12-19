@@ -14,67 +14,38 @@ datasource db {
 }
 
 model User {
-  id           String       @id @default(cuid())
-  email        String       @unique
-  username     String?      @unique
-  password     String
-  role         UserRole     @default(STUDENT)
-  
-  firstName    String?
-  lastName     String?
-  profileImage String?
-  
-  creatorProfile   CreatorProfile?  
-  purchases        Purchase[]
-  courses          Course[]
-  
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-}
-
-model CreatorProfile {
-  id           String       @id @default(cuid())
-  user         User         @relation(fields: [userId], references: [id])
-  userId       String       @unique
-  
-  brandName    String?
-  bio          String?
-  socialLinks  Json?
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  username      String
+  role  Role    @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courses   Course[] @relation("UserCourses")
+  Purchase Purchase[]
 }
 
 model Course {
-  id           String       @id @default(cuid())
-  creator      User         @relation(fields: [creatorId], references: [id])
-  creatorId    String
-  
-  title        String
-  description  String?
-  price        Decimal      @db.Decimal(10, 2)
-  discount     Decimal?     @db.Decimal(5, 2)
-  validity     Int          // Course validity in months
-  imageUrl     String?
-  content      String?      
-  
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  price       Float
+  creator     User      @relation("UserCourses", fields: [creatorId], references: [id])
+  creatorId   Int
   purchases    Purchase[]
-  
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
 }
 
 model Purchase {
-  id           String       @id @default(cuid())
-  user         User         @relation(fields: [userId], references: [id])
-  userId       String
-  
-  course       Course       @relation(fields: [courseId], references: [id])
-  courseId     String
-  
-  purchaseDate DateTime     @default(now())
-  expiryDate   DateTime
+  id        Int     @id @default(autoincrement())
+  student   User    @relation(fields: [studentId], references: [id])
+  studentId Int
+  course    Course  @relation(fields: [courseId], references: [id])
+  courseId  Int
+  enrolledAt DateTime @default(now())
 }
 
-enum UserRole {
-  STUDENT
-  CREATOR
+enum Role {
+  USER
   ADMIN
+  SUPERADMIN
 }
