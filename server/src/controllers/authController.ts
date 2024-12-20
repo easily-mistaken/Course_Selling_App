@@ -13,7 +13,7 @@ export const registerUser = async (req: Request, res: Response) => {
     // Validate request body using Zod
     const validatedData = signupSchema.parse(req.body);
 
-    const { email, password, username } = validatedData;
+    const { email, password, username, role } = validatedData;
 
     // Check if user or email already exists
     const existingUser = await prisma.user.findFirst({
@@ -36,6 +36,7 @@ export const registerUser = async (req: Request, res: Response) => {
         email,
         password: hashedPassword,
         username,
+        role,
       },
     });
 
@@ -94,6 +95,7 @@ export const loginUser = async (req: Request, res: Response) => {
         id: user.id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
     });
     return;
