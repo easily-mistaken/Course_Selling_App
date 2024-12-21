@@ -6,15 +6,17 @@ export async function getCourseById(req: Request, res: Response) {
     const courseId = req.params.courseId;
 
     const course = await client.course.findUnique({
-      where: { id: Number(courseId) },
+      where: { id: courseId },
     });
 
     if (!course) {
       return res.status(404).json({ msg: "Course not found" });
     }
     res.json({ course });
+    return;
   } catch (error) {
     res.status(500).json({ msg: "Internal server error" });
+    return;
   }
 }
 
@@ -23,7 +25,9 @@ export async function getBulkCourse(req: Request, res: Response) {
     const courses = await client.course.findMany();
 
     res.json({ courses });
+    return;
   } catch (error) {
     res.status(500).json({ msg: "Internal server error" });
+    return;
   }
 }

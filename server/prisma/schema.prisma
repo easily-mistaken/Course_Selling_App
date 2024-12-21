@@ -14,34 +14,43 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String      @id @default(uuid())
   email     String   
   password  String
   username      String
   role  Role    @default(USER)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   courses   Course[] @relation("UserCourses")
   Purchase Purchase[]
+
   @@unique([email, username])
 }
 
 model Course {
-  id          Int       @id @default(autoincrement())
+  id          String       @id @default(uuid())
   title       String
   description String
   price       Float
+  imageUrl    String
+
   creator     User      @relation("UserCourses", fields: [creatorId], references: [id])
-  creatorId   Int
+  creatorId   String
+
   purchases    Purchase[]
 }
 
 model Purchase {
-  id        Int     @id @default(autoincrement())
+  id        String     @id @default(uuid())
+
   student   User    @relation(fields: [studentId], references: [id])
-  studentId Int
+  studentId String
+
   course    Course  @relation(fields: [courseId], references: [id])
-  courseId  Int
+  courseId  String
+
   enrolledAt DateTime @default(now())
 }
 
