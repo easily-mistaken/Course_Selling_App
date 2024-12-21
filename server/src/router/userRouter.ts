@@ -1,8 +1,10 @@
 import { Router } from "express";
+import {
+  getPurchases,
+  purchaseCourseById,
+} from "../controllers/userControllers";
 
 export const userRouter = Router();
 
-userRouter.post("/login");
-userRouter.get("/courses");
-userRouter.get("/buy/:courseId");
-userRouter.get("/purchases");
+userRouter.get("/buy/:courseId", purchaseCourseById);
+userRouter.get("/purchases", getPurchases);

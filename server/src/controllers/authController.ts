@@ -66,7 +66,8 @@ export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = validatedData;
 
     // Find user by email
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findFirst({ where: { email } });
+
     if (!user) {
       res.status(400).json({ message: "Invalid email or password" });
       return;

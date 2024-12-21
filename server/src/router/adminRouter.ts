@@ -1,6 +1,12 @@
 import { Router } from "express";
+import {
+  createCourse,
+  updateCourse,
+  deleteCourse,
+} from "../controllers/adminControllers";
 
 export const adminRouter = Router();
 
-adminRouter.post("/course");
-adminRouter.post("/course/bulk");
+adminRouter.post("/create", createCourse);
+adminRouter.put("/course/:cousreId", updateCourse);
+adminRouter.delete("/course/:courseId", deleteCourse);

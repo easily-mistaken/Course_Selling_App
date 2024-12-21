@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 
-export function registerUser(req: Request, res: Response) {
-  res.status(201).json({ msg: "User successfully registered" });
-  return;
+export function purchaseCourseById(req: Request, res: Response) {
+  try {
+  } catch (error) {}
 }
-export function loginUser(req: Request, res: Response) {
-  res.status(200).json({ msg: "Logged-in successfully" });
+
+export function getPurchases(req: Request, res: Response) {
+  try {
+  } catch (error) {}
 }
