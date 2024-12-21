@@ -1,10 +1,7 @@
 import { Router } from "express";
-import {
-  getPurchases,
-  purchaseCourseById,
-} from "../controllers/userControllers";
+import { getPurchases, purchaseCourse } from "../controllers/userControllers";
 
 export const userRouter = Router();
 
-userRouter.get("/buy/:courseId", purchaseCourseById);
+userRouter.get("/buy/:courseId", purchaseCourse);
 userRouter.get("/purchases", getPurchases);

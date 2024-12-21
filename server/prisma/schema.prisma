@@ -17,14 +17,14 @@ model User {
   id        String      @id @default(uuid())
   email     String   
   password  String
-  username      String
-  role  Role    @default(USER)
+  username  String
+  role      Role    @default(USER)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   courses   Course[] @relation("UserCourses")
-  Purchase Purchase[]
+  Purchase  Purchase[]
 
   @@unique([email, username])
 }
@@ -39,7 +39,7 @@ model Course {
   creator     User      @relation("UserCourses", fields: [creatorId], references: [id])
   creatorId   String
 
-  purchases    Purchase[]
+  purchases   Purchase[]
 }
 
 model Purchase {
