@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { loginSchema, signupSchema } from "../schemas/auth";
+import { loginSchema, signupSchema } from "../types/zod";
 import prisma from "../db/prisma";
 import { generateToken } from "../utils/helper";
 import { saltRounds } from "../config/constants";
