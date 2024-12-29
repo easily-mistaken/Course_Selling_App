@@ -9,3 +9,5 @@ export const BLOCKCHAIN_COHORT_URL =
   "https://appxcontent.kaxa.in/subject/2024-07-05-0.8025085370209641.jpeg";
 export const COHORT2_URL =
   "https://appxcontent.kaxa.in/subject/2024-07-05-0.3715048534115637.jpeg";
+export const WHY_CHOOSE_US_URL =
+  "https://appxcontent.kaxa.in/mobilebucket//teachcode/admin/HOME_GRAPHIC/cover/1702880652367WhatsApp-Image-2023-12-18-at-11.48.18-AM.jpeg";

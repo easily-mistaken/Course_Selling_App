@@ -53,7 +53,7 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
             })}
           </ul>
         </aside>
-        <div className="flex-1 flex flex-col px-[7%] bg-red-200">
+        <div className="flex-1 flex flex-col px-[7%]">
           <div className="flex-grow">{children}</div>
           <footer className="bg-slate-200 flex justify-between text-sm p-10 rounded-t-lg shadow-xl">
             <div className="w-20">
