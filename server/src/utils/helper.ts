@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { User } from "../schemas/auth";
+import { User } from "../types/zod";
 
 // Helper function to generate JWT token
 export const generateToken = (user: User) => {

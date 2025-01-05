@@ -10,7 +10,8 @@ export async function getCourseById(req: Request, res: Response) {
     });
 
     if (!course) {
-      return res.status(404).json({ msg: "Course not found" });
+      res.status(404).json({ msg: "Course not found" });
+      return;
     }
     res.json({ course });
     return;

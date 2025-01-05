@@ -13,49 +13,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String      @id @default(uuid())
-  email     String   
+model Admin {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
   password  String
-  username  String
-  role      Role    @default(USER)
-
+  subdomain String   @unique
+  courses   Course[] // One-to-many relationship with courses
+  students  Student[] // One-to-many relationship with students
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
 
-  courses   Course[] @relation("UserCourses")
-  Purchase  Purchase[]
-
-  @@unique([email, username])
+model Student {
+  id        Int      @id @default(autoincrement())
+  email     String
+  password  String
+  adminId   Int      // Linked to a specific admin
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  purchases Purchase[] // One-to-many relationship with purchases
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Course {
-  id          String       @id @default(uuid())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   price       Float
-  imageUrl    String
-
-  creator     User      @relation("UserCourses", fields: [creatorId], references: [id])
-  creatorId   String
-
-  purchases   Purchase[]
+  adminId     Int      // Linked to the creator (admin)
+  admin       Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  purchases   Purchase[] // Track which students bought this course
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Purchase {
-  id        String     @id @default(uuid())
-
-  student   User    @relation(fields: [studentId], references: [id])
-  studentId String
-
-  course    Course  @relation(fields: [courseId], references: [id])
-  courseId  String
-
-  enrolledAt DateTime @default(now())
-}
-
-enum Role {
-  USER
-  ADMIN
-  SUPERADMIN
+  id          Int      @id @default(autoincrement())
+  studentId   Int      // Linked to the student
+  courseId    Int      // Linked to the course
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  purchaseDate DateTime @default(now())
 }
