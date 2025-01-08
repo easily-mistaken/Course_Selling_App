@@ -13,46 +13,86 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Admin {
-  id        Int      @id @default(autoincrement())
+model Creator {
+  id        String      @id @default(uuid())
   name      String
   email     String   @unique
   password  String
-  subdomain String   @unique
-  courses   Course[] // One-to-many relationship with courses
-  students  Student[] // One-to-many relationship with students
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  courses   Course[]
 }
 
-model Student {
-  id        Int      @id @default(autoincrement())
-  email     String
+model User {
+  id        String      @id @default(uuid())
+  name      String
+  email     String  @unique
   password  String
-  adminId   Int      // Linked to a specific admin
-  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
-  purchases Purchase[] // One-to-many relationship with purchases
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  purchases Purchase[]
 }
 
 model Course {
-  id          Int      @id @default(autoincrement())
+  id          String      @id @default(uuid())
   title       String
   description String
   price       Float
-  adminId     Int      // Linked to the creator (admin)
-  admin       Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
-  purchases   Purchase[] // Track which students bought this course
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  imageUrl     String
+  isUploaded  Boolean @default(true)
+
+  creatorId String
+  creator   Creator @relation(fields: [creatorId], references: [id])
+
+  purchases Purchase[]
+
+  courseFolders CourseFolder[]
 }
 
+
+model CourseFolder {
+  id          String      @id @default(uuid())
+  title       String
+  courseId String 
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([courseId, title])
+
+  courseContents CourseContent[]
+}
+
+model CourseContent {
+  id          String      @id @default(uuid())
+  title       String
+  contentUrl  String
+
+  courseFolderId String
+  courseFolder CourseFolder @relation(fields: [courseFolderId], references: [id])
+
+  isUploaded Boolean @default(true)
+  @@unique([courseFolderId, title])
+}
+
+model Progress {
+  id              String        @id @default(uuid())
+  completed       Boolean       @default(false)
+  lastAccessedAt  DateTime      @default(now())
+  
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  
+  courseId        String
+  course          Course        @relation(fields: [courseId], references: [id])
+  
+  contentId       String
+  content         CourseContent @relation(fields: [contentId], references: [id])
+
+  @@unique([userId, contentId])
+}
 model Purchase {
-  id          Int      @id @default(autoincrement())
-  studentId   Int      // Linked to the student
-  courseId    Int      // Linked to the course
-  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  purchaseDate DateTime @default(now())
+  id          String      @id @default(uuid())
+
+  userId   String
+  user     User  @relation(fields: [userId], references: [id])
+
+  courseId      String
+  course Course @relation(fields: [courseId], references: [id])
 }
