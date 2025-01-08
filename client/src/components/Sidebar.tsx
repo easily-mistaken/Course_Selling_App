@@ -1,13 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Home, BookOpen, ShoppingCart, Settings } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { Home, BookOpen, ShoppingCart, Settings } from "lucide-react";
 
 export default function Sidebar() {
   const menuItems = [
-    { icon: Home, label: 'Home', path: '/' },
-    { icon: BookOpen, label: 'Courses', path: '/courses' },
-    { icon: ShoppingCart, label: 'Purchases', path: '/purchases' },
-    { icon: Settings, label: 'Settings', path: '/settings' },
+    { icon: Home, label: "Home", path: "/" },
+    { icon: BookOpen, label: "Courses", path: "/courses" },
+    { icon: ShoppingCart, label: "Purchases", path: "/purchases" },
+    { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
   return (

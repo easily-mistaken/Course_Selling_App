@@ -1,6 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { BookOpen, LogIn, UserPlus } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { BookOpen, LogIn, UserPlus } from "lucide-react";
 
 export default function Navbar() {
   return (
@@ -13,7 +12,7 @@ export default function Navbar() {
               <span className="text-xl font-bold text-gray-800">LearnHub</span>
             </Link>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <Link
               to="/signin"

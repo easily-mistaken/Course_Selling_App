@@ -17,7 +17,7 @@ export async function purchaseCourse(req: Request, res: Response) {
 
     const existingPurchase = await client.purchase.findFirst({
       where: {
-        studentId: userId,
+        userId: userId,
         courseId: courseId,
       },
     });
@@ -29,8 +29,9 @@ export async function purchaseCourse(req: Request, res: Response) {
 
     const purchase = await client.purchase.create({
       data: {
-        studentId: userId,
+        userId: userId,
         courseId: courseId,
+        amount: 0, // or any appropriate value
       },
     });
 
@@ -47,7 +48,7 @@ export function getPurchases(req: Request, res: Response) {
     const userId = res.locals.User.id;
 
     const purchases = client.purchase.findMany({
-      where: { studentId: userId },
+      where: { userId: userId },
       include: { course: true },
     });
 

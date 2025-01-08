@@ -14,61 +14,98 @@ datasource db {
 }
 
 model Creator {
-  id        String      @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
+  id          String    @id @default(uuid())
+  name        String
+  email       String    @unique
+  password    String
 
-  courses   Course[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  courses     Course[]
 }
 
 model User {
-  id        String      @id @default(uuid())
-  name      String
-  email     String  @unique
-  password  String
+  id          String     @id @default(uuid())
+  name        String     @default("Unknown")
+  email       String     @unique
+  password    String
 
-  purchases Purchase[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  avatarUrl   String?    // Optional profile picture
+  bio         String?    // Optional bio
+
+  purchases   Purchase[]
+
+  // Add progress tracking
+  progress    Progress[]
 }
 
 model Course {
-  id          String      @id @default(uuid())
-  title       String
-  description String
-  price       Float
-  imageUrl     String
-  isUploaded  Boolean @default(true)
+  id              String          @id @default(uuid())
+  title           String
+  description     String
+  price           Float
+  imageUrl        String          // Cover image for the course
+  isPublished     Boolean         @default(false)
 
-  creatorId String
-  creator   Creator @relation(fields: [creatorId], references: [id])
-
-  purchases Purchase[]
-
-  courseFolders CourseFolder[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  creatorId       String
+  creator         Creator         @relation(fields: [creatorId], references: [id])
+  
+  purchases       Purchase[]
+  courseFolders   CourseFolder[]
+  progress        Progress[]      // Track progress for each user
 }
 
-
 model CourseFolder {
-  id          String      @id @default(uuid())
-  title       String
-  courseId String 
-  course Course @relation(fields: [courseId], references: [id])
+  id              String          @id @default(uuid())
+  title           String
+  description     String?         // Optional description
+  createdAt       DateTime        @default(now())
+  
+  courseId        String
+  course          Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  courseContents  CourseContent[]
 
   @@unique([courseId, title])
-
-  courseContents CourseContent[]
 }
 
 model CourseContent {
-  id          String      @id @default(uuid())
-  title       String
-  contentUrl  String
+  id              String        @id @default(uuid())
+  title           String
+  description     String?       // Optional description
+  contentUrl      String
+  duration        Int?          // Duration in seconds for video content
+  type            ContentType   // Video, PDF, etc.
+  isPublished     Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  
+  courseFolderId  String
+  courseFolder    CourseFolder  @relation(fields: [courseFolderId], references: [id], onDelete: Cascade)
+  
+  progress        Progress[]    // Track progress for each user
 
-  courseFolderId String
-  courseFolder CourseFolder @relation(fields: [courseFolderId], references: [id])
-
-  isUploaded Boolean @default(true)
   @@unique([courseFolderId, title])
+}
+
+model Purchase {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  amount      Float     // Store the actual purchase amount
+  
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  
+  courseId    String
+  course      Course    @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])  // Prevent duplicate purchases
 }
 
 model Progress {
@@ -87,12 +124,10 @@ model Progress {
 
   @@unique([userId, contentId])
 }
-model Purchase {
-  id          String      @id @default(uuid())
 
-  userId   String
-  user     User  @relation(fields: [userId], references: [id])
-
-  courseId      String
-  course Course @relation(fields: [courseId], references: [id])
+enum ContentType {
+  VIDEO
+  PDF
+  DOCUMENT
+  QUIZ
 }

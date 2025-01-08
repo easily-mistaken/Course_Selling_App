@@ -18,7 +18,7 @@ export const registerUser = async (req: Request, res: Response) => {
     // Check if user or email already exists
     const existingUser = await prisma.user.findFirst({
       where: {
-        OR: [{ email }, { username }],
+        OR: [{ email }, { name }],
       },
     });
 

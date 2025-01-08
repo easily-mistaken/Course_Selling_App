@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, User } from "lucide-react";
 import RoleSelection from "./RoleSelection";
+import axios from "axios";
 
 export default function SignUp() {
   const [selectedRole, setSelectedRole] = useState<
@@ -15,7 +16,13 @@ export default function SignUp() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign up logic here with selectedRole and formData
+
+    axios({
+      method: "POST",
+      url: "http://localhost:3000/api/auth/signup",
+      data: { ...formData, role: selectedRole },
+    });
+
     console.log("Sign up:", { ...formData, role: selectedRole });
   };
 
@@ -112,6 +119,7 @@ export default function SignUp() {
             <div>
               <button
                 type="submit"
+                onClick={handleSubmit}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Sign up as {selectedRole}
